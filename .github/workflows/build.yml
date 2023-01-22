@@ -76,14 +76,14 @@ jobs:
             linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ env.GHCR_SLUG }}:full
             ${{ env.GHCR_SLUG }}:full-py311
-            ${{ env.DOCK_SLUG }}:full
             ${{ env.DOCK_SLUG }}:full-py311
-            ${{ env.GHCR_SLUG }}:extra-audio
+            ${{ env.GHCR_SLUG }}:full
+            ${{ env.DOCK_SLUG }}:full
             ${{ env.GHCR_SLUG }}:extra-audio-py311
-            ${{ env.DOCK_SLUG }}:extra-audio
             ${{ env.DOCK_SLUG }}:extra-audio-py311
+            ${{ env.GHCR_SLUG }}:extra-audio
+            ${{ env.DOCK_SLUG }}:extra-audio
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -101,14 +101,14 @@ jobs:
             linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ env.GHCR_SLUG }}:noaudio
             ${{ env.GHCR_SLUG }}:noaudio-py311
-            ${{ env.DOCK_SLUG }}:noaudio
             ${{ env.DOCK_SLUG }}:noaudio-py311
-            ${{ env.GHCR_SLUG }}:core
+            ${{ env.GHCR_SLUG }}:noaudio
+            ${{ env.DOCK_SLUG }}:noaudio
             ${{ env.GHCR_SLUG }}:core-py311
-            ${{ env.DOCK_SLUG }}:core
             ${{ env.DOCK_SLUG }}:core-py311
+            ${{ env.GHCR_SLUG }}:core
+            ${{ env.DOCK_SLUG }}:core
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -126,10 +126,10 @@ jobs:
             linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ env.GHCR_SLUG }}:extra
             ${{ env.GHCR_SLUG }}:extra-py311
-            ${{ env.DOCK_SLUG }}:extra
             ${{ env.DOCK_SLUG }}:extra-py311
+            ${{ env.GHCR_SLUG }}:extra
+            ${{ env.DOCK_SLUG }}:extra
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -147,14 +147,14 @@ jobs:
             linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ env.GHCR_SLUG }}:audio
             ${{ env.GHCR_SLUG }}:audio-py311
-            ${{ env.DOCK_SLUG }}:audio
             ${{ env.DOCK_SLUG }}:audio-py311
-            ${{ env.GHCR_SLUG }}:core-audio
+            ${{ env.GHCR_SLUG }}:audio
+            ${{ env.DOCK_SLUG }}:audio
             ${{ env.GHCR_SLUG }}:core-audio-py311
-            ${{ env.DOCK_SLUG }}:core-audio
             ${{ env.DOCK_SLUG }}:core-audio-py311
+            ${{ env.GHCR_SLUG }}:core-audio
+            ${{ env.DOCK_SLUG }}:core-audio
             ${{ env.GHCR_SLUG }}:latest
             ${{ env.DOCK_SLUG }}:latest
           build-args: |
@@ -164,6 +164,54 @@ jobs:
             ${{ env.GHCR_SLUG }}:core
             ${{ env.GHCR_SLUG }}:core-audio
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push pylav-core
+        uses: docker/build-push-action@v3
+        with:
+          target: pylav-core
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64
+            linux/386
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.GHCR_SLUG }}:pylav
+            ${{ env.DOCK_SLUG }}:pylav
+            ${{ env.GHCR_SLUG }}:pylav-core
+            ${{ env.DOCK_SLUG }}:pylav-core
+            ${{ env.GHCR_SLUG }}:pylav-latest
+            ${{ env.DOCK_SLUG }}:pylav-latest
+          build-args: |
+            PCX_DISCORDBOT_BUILD=${{ github.run_id }}
+            PCX_DISCORDBOT_COMMIT=${{ github.sha }}
+          cache-from: |
+            ${{ env.GHCR_SLUG }}:core
+            ${{ env.GHCR_SLUG }}:pylav-core
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push pylav-extra
+        uses: docker/build-push-action@v3
+        with:
+          target: extra-pylav
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64
+            linux/386
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.GHCR_SLUG }}:pylav-full
+            ${{ env.DOCK_SLUG }}:pylav-full
+            ${{ env.GHCR_SLUG }}:pylav-extra
+            ${{ env.DOCK_SLUG }}:pylav-extra
+          build-args: |
+            PCX_DISCORDBOT_BUILD=${{ github.run_id }}
+            PCX_DISCORDBOT_COMMIT=${{ github.sha }}
+          cache-from: |
+            ${{ env.GHCR_SLUG }}:extra-audio
+            ${{ env.GHCR_SLUG }}:pylav-core
+            ${{ env.GHCR_SLUG }}:pylav-extra
+          labels: ${{ steps.meta.outputs.labels }}
       -
         name: Check manifest
         if: github.event_name != 'pull_request'
@@ -172,10 +220,14 @@ jobs:
           docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:extra
           docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:core-audio
           docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:extra-audio
+          docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:extra-pylav
+          docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:core-pylav
           docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:core
           docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:extra
           docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:core-audio
           docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:extra-audio
+          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:extra-pylav
+          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:core-pylav
       -
         name: Check pull
         if: github.event_name != 'pull_request'
@@ -184,15 +236,23 @@ jobs:
           docker pull ${{ env.GHCR_SLUG }}:extra
           docker pull ${{ env.GHCR_SLUG }}:core-audio
           docker pull ${{ env.GHCR_SLUG }}:extra-audio
+          docker pull ${{ env.GHCR_SLUG }}:core-pylav
+          docker pull ${{ env.GHCR_SLUG }}:extra-pylav
           docker image inspect ${{ env.GHCR_SLUG }}:core
           docker image inspect ${{ env.GHCR_SLUG }}:extra
           docker image inspect ${{ env.GHCR_SLUG }}:core-audio
           docker image inspect ${{ env.GHCR_SLUG }}:extra-audio
+          docker image inspect ${{ env.GHCR_SLUG }}:core-pylav
+          docker image inspect ${{ env.GHCR_SLUG }}:extra-pylav
           docker pull ${{ env.DOCK_SLUG }}:core
           docker pull ${{ env.DOCK_SLUG }}:extra
           docker pull ${{ env.DOCK_SLUG }}:core-audio
           docker pull ${{ env.DOCK_SLUG }}:extra-audio
+          docker pull ${{ env.DOCK_SLUG }}:core-pylav
+          docker pull ${{ env.DOCK_SLUG }}:extra-pylav
           docker image inspect ${{ env.DOCK_SLUG }}:core
           docker image inspect ${{ env.DOCK_SLUG }}:extra
           docker image inspect ${{ env.DOCK_SLUG }}:core-audio
           docker image inspect ${{ env.DOCK_SLUG }}:extra-audio
+          docker image inspect ${{ env.DOCK_SLUG }}:core-pylav
+          docker image inspect ${{ env.DOCK_SLUG }}:extra-pylav
