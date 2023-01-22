@@ -199,6 +199,7 @@ jobs:
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
           cache-from: |
             ${{ env.GHCR_SLUG }}:extra-audio
+            ${{ env.GHCR_SLUG }}:core-pylav
             ${{ env.GHCR_SLUG }}:extra-pylav
           labels: ${{ steps.meta.outputs.labels }}
       -
