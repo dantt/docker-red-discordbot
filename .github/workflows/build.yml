@@ -15,7 +15,7 @@ on:
       - Dockerfile
       - .github/workflows/build.yml
       - root/**
-  repository_dispatch:
+  workflow_dispatch:
 
 jobs:
   docker:
