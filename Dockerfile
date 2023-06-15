@@ -190,8 +190,8 @@ RUN set -eux; \
         libaio-dev \
     ; \
     rm -rf /var/lib/apt/lists/*; \
-    mkdir -p /data/pylav;
-
+    mkdir -p /data/pylav; \
+    chmod -r 777 /data/pylav
 
 FROM extra-pylav-build as extra-pylav
 
