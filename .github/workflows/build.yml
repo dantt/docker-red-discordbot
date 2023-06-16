@@ -27,8 +27,7 @@ jobs:
       packages: write
     env:
       TITLE: Red-DiscordBot
-      GHCR_SLUG: ghcr.io/drapersniper/red-discordbot
-      DOCK_SLUG: docker.io/drapersniper/red-discordbot
+      GHCR_SLUG: ghcr.io/dantt/docker-red-discordbot
     steps:
       -
         name: Checkout
@@ -40,7 +39,6 @@ jobs:
         with:
           images: |
             ${{ env.GHCR_SLUG }}
-            ${{ env.DOCK_SLUG }}
           labels: |
             maintainer=${{ github.repository_owner }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
@@ -78,13 +76,9 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_SLUG }}:full-py311
-            ${{ env.DOCK_SLUG }}:full-py311
             ${{ env.GHCR_SLUG }}:full
-            ${{ env.DOCK_SLUG }}:full
             ${{ env.GHCR_SLUG }}:extra-audio-py311
-            ${{ env.DOCK_SLUG }}:extra-audio-py311
             ${{ env.GHCR_SLUG }}:extra-audio
-            ${{ env.DOCK_SLUG }}:extra-audio
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -103,13 +97,9 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_SLUG }}:noaudio-py311
-            ${{ env.DOCK_SLUG }}:noaudio-py311
             ${{ env.GHCR_SLUG }}:noaudio
-            ${{ env.DOCK_SLUG }}:noaudio
             ${{ env.GHCR_SLUG }}:core-py311
-            ${{ env.DOCK_SLUG }}:core-py311
             ${{ env.GHCR_SLUG }}:core
-            ${{ env.DOCK_SLUG }}:core
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -128,9 +118,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_SLUG }}:extra-py311
-            ${{ env.DOCK_SLUG }}:extra-py311
             ${{ env.GHCR_SLUG }}:extra
-            ${{ env.DOCK_SLUG }}:extra
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -149,15 +137,10 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_SLUG }}:audio-py311
-            ${{ env.DOCK_SLUG }}:audio-py311
             ${{ env.GHCR_SLUG }}:audio
-            ${{ env.DOCK_SLUG }}:audio
             ${{ env.GHCR_SLUG }}:core-audio-py311
-            ${{ env.DOCK_SLUG }}:core-audio-py311
             ${{ env.GHCR_SLUG }}:core-audio
-            ${{ env.DOCK_SLUG }}:core-audio
             ${{ env.GHCR_SLUG }}:latest
-            ${{ env.DOCK_SLUG }}:latest
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -177,11 +160,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_SLUG }}:pylav
-            ${{ env.DOCK_SLUG }}:pylav
             ${{ env.GHCR_SLUG }}:core-pylav
-            ${{ env.DOCK_SLUG }}:core-pylav
             ${{ env.GHCR_SLUG }}:latest-pylav
-            ${{ env.DOCK_SLUG }}:latest-pylav
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -200,9 +180,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.GHCR_SLUG }}:full-pylav
-            ${{ env.DOCK_SLUG }}:full-pylav
             ${{ env.GHCR_SLUG }}:extra-pylav
-            ${{ env.DOCK_SLUG }}:extra-pylav
           build-args: |
             PCX_DISCORDBOT_BUILD=${{ github.run_id }}
             PCX_DISCORDBOT_COMMIT=${{ github.sha }}
@@ -221,12 +199,6 @@ jobs:
           docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:extra-audio
           docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:extra-pylav
           docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:core-pylav
-          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:core
-          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:extra
-          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:core-audio
-          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:extra-audio
-          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:extra-pylav
-          docker buildx imagetools inspect ${{ env.DOCK_SLUG }}:core-pylav
       -
         name: Check pull
         if: github.event_name != 'pull_request'
@@ -243,15 +215,3 @@ jobs:
           docker image inspect ${{ env.GHCR_SLUG }}:extra-audio
           docker image inspect ${{ env.GHCR_SLUG }}:core-pylav
           docker image inspect ${{ env.GHCR_SLUG }}:extra-pylav
-          docker pull ${{ env.DOCK_SLUG }}:core
-          docker pull ${{ env.DOCK_SLUG }}:extra
-          docker pull ${{ env.DOCK_SLUG }}:core-audio
-          docker pull ${{ env.DOCK_SLUG }}:extra-audio
-          docker pull ${{ env.DOCK_SLUG }}:core-pylav
-          docker pull ${{ env.DOCK_SLUG }}:extra-pylav
-          docker image inspect ${{ env.DOCK_SLUG }}:core
-          docker image inspect ${{ env.DOCK_SLUG }}:extra
-          docker image inspect ${{ env.DOCK_SLUG }}:core-audio
-          docker image inspect ${{ env.DOCK_SLUG }}:extra-audio
-          docker image inspect ${{ env.DOCK_SLUG }}:core-pylav
-          docker image inspect ${{ env.DOCK_SLUG }}:extra-pylav
