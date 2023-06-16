@@ -97,7 +97,7 @@ RUN set -eux; \
 # Install redbot audio dependencies
     apt-get update; \
     apt-get install -y --no-install-recommends \
-        openjdk-11-jre-headless \
+        openjdk-17-jre-headless \
     ; \
     rm -rf /var/lib/apt/lists/*;
 
@@ -125,7 +125,7 @@ RUN set -eux; \
 # Install redbot audio dependencies
     apt-get update; \
     apt-get install -y --no-install-recommends \
-        openjdk-11-jre-headless \
+        openjdk-17-jre-headless \
     ; \
     rm -rf /var/lib/apt/lists/*;
 
