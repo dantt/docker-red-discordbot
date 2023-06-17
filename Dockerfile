@@ -207,7 +207,10 @@ ENV PYLAV__DATA_FOLDER /data/pylav
 ENV PYLAV__YAML_CONFIG /data/pylav/pylav.yaml
 ENV PYLAV__IN_CONTAINER 1
 
-COPY root/ /
+COPY root/app/ /app/
+COPY root/bin/ /bin/
+COPY /root/defaults /defaults/
+# COPY root/ /
 
 CMD ["/app/start-redbot.sh"]
 
