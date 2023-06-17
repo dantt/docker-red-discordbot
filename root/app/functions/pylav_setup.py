@@ -243,6 +243,21 @@ if __name__ == "__main__":
     for folder in (DownloaderLibFolder, RepoManagerRepoFolder, CogManagerCogFolder):
         if not folder.exists():
             folder.mkdir(parents=True, mode=0o776)
+    # Fix git issues with the container permissions
+    # git config --global --add safe.directory /data/cogs/RepoManager/repos/pylav
+    subprocess.Popen(
+            [
+               "git",
+               "config",
+                "--global",
+                "--add",
+                "safe.directory",
+                str(RepoManagerRepoFolder),
+            ],
+            env=get_git_env(),
+            stdout=subprocess.PIPE,
+            universal_newlines=True,
+        )
     if not DEV_PYLAV_COGS:
         current_commit = clone_or_update_pylav_repo()
         existing_commit = get_existing_commit()
