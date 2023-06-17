@@ -1,10 +1,5 @@
 FROM python:3.11-slim as core-build
 
-# Add PhasecoreX user-entrypoint script
-ADD https://raw.githubusercontent.com/PhasecoreX/docker-user-image/master/user-entrypoint.sh /bin/user-entrypoint
-RUN chmod +x /bin/user-entrypoint && /bin/user-entrypoint --init
-ENTRYPOINT ["/bin/user-entrypoint"]
-
 RUN set -eux; \
 # Install Red-DiscordBot dependencies
     apt-get update; \
